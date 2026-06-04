@@ -1,0 +1,9 @@
+# Great Docs Configuration
+
+# Hero Section
+hero:
+  enabled: true
+  tagline: "Screenshots and PDFs from web pages. Powered by headless Chrome."
+
+# GitHub Integration
+github_style: widget
