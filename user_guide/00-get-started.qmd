@@ -1,0 +1,59 @@
+---
+title: "Get Started"
+guide-section: "Getting Started"
+tags: [Overview]
+---
+
+# Get Started
+
+Learn what nokap is, why it exists, and how it works under the hood.
+
+## What Is nokap?
+
+**nokap** is a lightweight Python package that captures screenshots and PDFs from web pages using headless Chrome via the [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/) (CDP). It communicates directly with Chrome over WebSockets — no Selenium, no Playwright, no browser driver binaries.
+
+The name "nokap" comes from the idea of a clean, no-cap screenshot: what you see is what you get.
+
+## Why Use nokap?
+
+If you need to:
+
+- Convert HTML tables or reports to images for embedding in documents
+- Generate PDFs from web pages with precise control over page size and margins
+- Capture specific elements using CSS selectors
+- Produce retina-quality (2×, 3×) screenshots
+- Automate web page captures without heavyweight browser automation frameworks
+
+...then nokap is the right tool.
+
+## How It Works
+
+nokap's architecture is intentionally simple:
+
+1. **Launch** — Finds and starts headless Chrome with a random debugging port
+2. **Connect** — Opens a WebSocket to Chrome's CDP endpoint
+3. **Capture** — Creates a tab, navigates, waits, then calls `Page.captureScreenshot` or `Page.printToPDF`
+4. **Cleanup** — Closes the tab; Chrome stays running for reuse until `nokap.close()` or process exit
+
+The entire package has a single runtime dependency: [`websockets`](https://pypi.org/project/websockets/).
+
+## Key Features
+
+| Feature | Details |
+|---------|---------|
+| **Image formats** | PNG, JPEG, WebP |
+| **PDF generation** | Configurable page size, margins, orientation |
+| **CSS selectors** | Capture specific elements (or union of multiple) |
+| **Zoom/scale** | Produce retina-quality (2×, 3×) images |
+| **Expand/padding** | Add whitespace around captured elements |
+| **Local HTML** | Render HTML strings or local `.html` files |
+| **Viewport control** | Set width/height for responsive layouts |
+| **Custom User-Agent** | Override the browser UA string |
+| **CLI** | `nokap webshot` and `nokap from-html` commands |
+| **Auto-cleanup** | Chrome process managed via `atexit` |
+| **Jupyter-safe** | Works in notebooks (no event loop conflicts) |
+
+## Next Steps
+
+- [Installation](01-installation.qmd) — Get nokap set up on your system
+- [Quick Start](02-quick-start.qmd) — Your first screenshot in 30 seconds
