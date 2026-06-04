@@ -225,7 +225,8 @@ class TestWebshotIntegration:
         html_file.write_text("<html><body><p>Viewport</p></body></html>")
         out = str(tmp_path / "out.png")
         result = runner.invoke(
-            cli, ["webshot", str(html_file), out, "--vwidth", "1920", "--vheight", "1080"]
+            cli,
+            ["webshot", str(html_file), out, "--vwidth", "1920", "--vheight", "1080"],
         )
         assert result.exit_code == 0
         assert (tmp_path / "out.png").exists()
@@ -249,7 +250,9 @@ class TestWebshotIntegration:
         html_file = tmp_path / "page.html"
         html_file.write_text("<html><body><p>A4</p></body></html>")
         out = str(tmp_path / "out.pdf")
-        result = runner.invoke(cli, ["webshot", str(html_file), out, "--page-size", "a4"])
+        result = runner.invoke(
+            cli, ["webshot", str(html_file), out, "--page-size", "a4"]
+        )
         assert result.exit_code == 0
 
     def test_pdf_print_background(self, runner, tmp_path):
@@ -258,7 +261,9 @@ class TestWebshotIntegration:
             "<html><body style='background:yellow;'><p>BG</p></body></html>"
         )
         out = str(tmp_path / "out.pdf")
-        result = runner.invoke(cli, ["webshot", str(html_file), out, "--print-background"])
+        result = runner.invoke(
+            cli, ["webshot", str(html_file), out, "--print-background"]
+        )
         assert result.exit_code == 0
 
     def test_default_output_filename(self, runner, tmp_path):
@@ -304,7 +309,9 @@ class TestFromHtmlIntegration:
             "<p>Not this</p></body></html>"
         )
         out = str(tmp_path / "out.png")
-        result = runner.invoke(cli, ["from-html", str(html_file), out, "-s", "#capture"])
+        result = runner.invoke(
+            cli, ["from-html", str(html_file), out, "-s", "#capture"]
+        )
         assert result.exit_code == 0
         assert (tmp_path / "out.png").exists()
 
@@ -342,7 +349,8 @@ class TestFromHtmlIntegration:
         html_file.write_text("<html><body><p>Wide</p></body></html>")
         out = str(tmp_path / "out.png")
         result = runner.invoke(
-            cli, ["from-html", str(html_file), out, "--vwidth", "1440", "--vheight", "900"]
+            cli,
+            ["from-html", str(html_file), out, "--vwidth", "1440", "--vheight", "900"],
         )
         assert result.exit_code == 0
 
@@ -372,7 +380,9 @@ class TestFromHtmlIntegration:
         assert (tmp_path / "out.png").exists()
 
     def test_large_html_table(self, runner, tmp_path):
-        rows = "".join(f"<tr><td>Row {i}</td><td>Data {i}</td></tr>" for i in range(100))
+        rows = "".join(
+            f"<tr><td>Row {i}</td><td>Data {i}</td></tr>" for i in range(100)
+        )
         html_file = tmp_path / "input.html"
         html_file.write_text(f"<html><body><table>{rows}</table></body></html>")
         out = str(tmp_path / "out.png")
@@ -417,23 +427,33 @@ class TestCLIErrorHandling:
 
 class TestCLIOptionValidation:
     def test_webshot_invalid_vwidth_type(self, runner):
-        result = runner.invoke(cli, ["webshot", "https://example.com", "o.png", "--vwidth", "abc"])
+        result = runner.invoke(
+            cli, ["webshot", "https://example.com", "o.png", "--vwidth", "abc"]
+        )
         assert result.exit_code != 0
 
     def test_webshot_invalid_vheight_type(self, runner):
-        result = runner.invoke(cli, ["webshot", "https://example.com", "o.png", "--vheight", "abc"])
+        result = runner.invoke(
+            cli, ["webshot", "https://example.com", "o.png", "--vheight", "abc"]
+        )
         assert result.exit_code != 0
 
     def test_webshot_invalid_expand_type(self, runner):
-        result = runner.invoke(cli, ["webshot", "https://example.com", "o.png", "-e", "abc"])
+        result = runner.invoke(
+            cli, ["webshot", "https://example.com", "o.png", "-e", "abc"]
+        )
         assert result.exit_code != 0
 
     def test_webshot_invalid_delay_type(self, runner):
-        result = runner.invoke(cli, ["webshot", "https://example.com", "o.png", "-d", "abc"])
+        result = runner.invoke(
+            cli, ["webshot", "https://example.com", "o.png", "-d", "abc"]
+        )
         assert result.exit_code != 0
 
     def test_webshot_invalid_zoom_type(self, runner):
-        result = runner.invoke(cli, ["webshot", "https://example.com", "o.png", "-z", "abc"])
+        result = runner.invoke(
+            cli, ["webshot", "https://example.com", "o.png", "-z", "abc"]
+        )
         assert result.exit_code != 0
 
     def test_from_html_invalid_expand_type(self, runner, tmp_path):
