@@ -7,7 +7,17 @@ from pathlib import Path
 from typing import Any
 
 from ._browser import Chrome, find_chrome
-from ._cdp import CDPError, SyncCDP
+from ._cdp import SyncCDP
+from ._errors import (
+    CDPError,
+    ChromeNotFoundError,
+    ChromeStartError,
+    ConnectionError_,
+    GunError,
+    NavigationError,
+    PageLoadTimeout,
+    SelectorError,
+)
 from ._pdf import capture_pdf
 from ._screenshot import capture_screenshot
 from ._session import Session
@@ -21,7 +31,13 @@ __all__ = [
     "find_chrome",
     "Chrome",
     "Session",
+    "GunError",
     "CDPError",
+    "ChromeNotFoundError",
+    "ChromeStartError",
+    "NavigationError",
+    "PageLoadTimeout",
+    "SelectorError",
 ]
 
 # ---------------------------------------------------------------------------
@@ -31,17 +47,27 @@ __all__ = [
 _browser: Chrome | None = None
 _cdp: SyncCDP | None = None
 
+_MAX_RETRIES = 2
+
 
 def _get_browser() -> Chrome:
     """Get or create the module-level Chrome browser instance."""
     global _browser
     if _browser is None or not _browser.is_alive():
+        # If browser died, also reset the CDP connection
+        global _cdp
+        if _cdp is not None:
+            try:
+                _cdp.close()
+            except Exception:
+                pass
+            _cdp = None
         _browser = Chrome()
     return _browser
 
 
 def _get_cdp() -> SyncCDP:
-    """Get or create the module-level CDP connection."""
+    """Get or create the module-level CDP connection, with auto-recovery."""
     global _cdp, _browser
     browser = _get_browser()
     if _cdp is None:
@@ -144,9 +170,7 @@ def webshot(
     """
     # Resolve URL
     url_str: str
-    if isinstance(url, Path):
-        url_str = file_url(url)
-    elif not is_url(str(url)):
+    if isinstance(url, Path) or not is_url(str(url)):
         url_str = file_url(url)
     else:
         url_str = str(url)
@@ -155,9 +179,20 @@ def webshot(
     out_file = Path(file).resolve()
     is_pdf = out_file.suffix.lower() == ".pdf"
 
-    # Get CDP connection and create a session
-    cdp = _get_cdp()
-    session = Session(cdp, width=vwidth, height=vheight)
+    # Get CDP connection and create a session (with retry on connection failure)
+    for attempt in range(_MAX_RETRIES + 1):
+        try:
+            cdp = _get_cdp()
+            session = Session(cdp, width=vwidth, height=vheight)
+            break
+        except (ConnectionError_, OSError):
+            if attempt == _MAX_RETRIES:
+                raise
+            # Connection stale — reset and retry
+            close()
+    else:
+        cdp = _get_cdp()
+        session = Session(cdp, width=vwidth, height=vheight)
 
     try:
         # Set user agent if provided
