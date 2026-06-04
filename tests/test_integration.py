@@ -99,7 +99,8 @@ class TestGreatTables:
     gt = pytest.importorskip("great_tables")
 
     def test_gt_table_snapshot(self, tmp_path):
-        """Capture a GT table as a PNG, matching the gun-test.qmd workflow."""
+        """Capture a GT table as a PNG, matching the nokap-test.qmd workflow."""
+        pytest.importorskip("pandas")
         from great_tables import GT, exibble
 
         html = GT(exibble).as_raw_html(make_page=True, all_important=True)
