@@ -210,6 +210,9 @@ tempCodeRunnerFile.py
 # Ruff stuff:
 .ruff_cache/
 
+# Great Docs (generated build output)
+great-docs/
+
 # PyPI configuration file
 .pypirc
 
