@@ -1,0 +1,125 @@
+---
+title: "Selectors and Clipping"
+guide-section: "Core Concepts"
+tags: [Screenshots, Configuration]
+---
+
+# Selectors and Clipping
+
+Capture specific elements using CSS selectors, expand padding, or define manual clip regions.
+
+## CSS Selectors
+
+Use the `selector` parameter to capture a specific element on the page. The screenshot is cropped to the element's bounding box:
+
+```{python}
+#| eval: false
+import nokap
+
+# Capture just the main heading
+nokap.webshot("https://example.com", "heading.png", selector="h1")
+
+# Capture by class
+nokap.webshot("https://example.com", "nav.png", selector=".navigation")
+
+# Capture by ID
+nokap.webshot("https://example.com", "hero.png", selector="#hero-section")
+```
+
+## Multiple Selectors
+
+Pass a list of selectors to capture the union of multiple elements. The bounding box expands to encompass all matched elements:
+
+```{python}
+#| eval: false
+# Capture header and footer together
+nokap.webshot(
+    "page.html",
+    "combined.png",
+    selector=["header", "footer"]
+)
+```
+
+Elements with zero width or height (invisible elements) are automatically excluded from the union calculation.
+
+## Expand / Padding
+
+The `expand` parameter adds padding (in pixels) around the captured element's bounding box:
+
+```{python}
+#| eval: false
+# Add 10px padding on all sides
+nokap.webshot("page.html", "padded.png", selector="table", expand=10)
+```
+
+For asymmetric padding, pass a 4-tuple of `(top, right, bottom, left)`:
+
+```{python}
+#| eval: false
+# 20px top/bottom, 10px left/right
+nokap.webshot(
+    "page.html",
+    "padded.png",
+    selector="table",
+    expand=(20, 10, 20, 10),
+)
+```
+
+## Clip Rectangle
+
+For precise manual control, use `cliprect` instead of a selector. It takes a tuple of `(x, y, width, height)` in CSS pixels:
+
+```{python}
+#| eval: false
+# Capture a 400×300 region starting at (50, 100)
+nokap.webshot(
+    "https://example.com",
+    "region.png",
+    cliprect=(50, 100, 400, 300),
+)
+```
+
+:::{.callout-warning}
+`selector` and `cliprect` are mutually exclusive. Passing both raises an error.
+:::
+
+## Selectors with from_html()
+
+When using `from_html()`, the default selector is `"html"` (full page). Override it to capture specific elements:
+
+```{python}
+#| eval: false
+html = """
+<div style="padding: 2rem;">
+  <table id="data-table">
+    <tr><th>Name</th><th>Value</th></tr>
+    <tr><td>Alpha</td><td>100</td></tr>
+    <tr><td>Beta</td><td>200</td></tr>
+  </table>
+  <p>Footer text (not captured)</p>
+</div>
+"""
+
+nokap.from_html(html, "table.png", selector="#data-table", expand=5)
+```
+
+## Selector Errors
+
+If a selector matches no elements, nokap raises a `SelectorError`:
+
+```{python}
+#| eval: false
+import nokap
+from nokap import SelectorError
+
+try:
+    nokap.webshot("page.html", "out.png", selector="#nonexistent")
+except SelectorError as e:
+    print(f"Selector failed: {e}")
+    # "No element matches selector: '#nonexistent'"
+```
+
+## Next Steps
+
+- [PDF Generation](12-pdf-generation.qmd) — Generate PDFs with page layout options
+- [Integration with Great Tables](20-great-tables-integration.qmd) — Use nokap with GT
