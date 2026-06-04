@@ -23,3 +23,8 @@ def find_open_port() -> int:
         return s.getsockname()[1]
 
 
+def is_url(s: str) -> bool:
+    """Check if a string looks like a URL (http/https/file)."""
+    return s.startswith(("http://", "https://", "file://"))
+
+
