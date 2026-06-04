@@ -154,3 +154,47 @@ class Session:
         remote_obj = result.get("result", {})
         return remote_obj.get("value")
 
+    def get_element_bounds(self, selector: str) -> ClipRect:
+        """
+        Get the bounding box of an element matched by a CSS selector.
+
+        Parameters
+        ----------
+        selector
+            CSS selector to match.
+
+        Returns
+        -------
+        ClipRect
+            The bounding rectangle of the element.
+
+        Raises
+        ------
+        ValueError
+            If the selector matches no elements.
+        """
+        # Use JavaScript to get the bounding rect (more reliable than DOM.getBoxModel
+        # for elements with transforms, scroll, etc.)
+        js = f"""
+        (() => {{
+            const el = document.querySelector({_js_string(selector)});
+            if (!el) return null;
+            const rect = el.getBoundingClientRect();
+            return {{
+                x: rect.x,
+                y: rect.y,
+                width: rect.width,
+                height: rect.height
+            }};
+        }})()
+        """
+        result = self.evaluate(js)
+        if result is None:
+            raise ValueError(f"No element matches selector: {selector!r}")
+        return ClipRect(
+            x=result["x"],
+            y=result["y"],
+            width=result["width"],
+            height=result["height"],
+        )
+
