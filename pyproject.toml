@@ -28,8 +28,11 @@ classifiers = [
     "Topic :: Multimedia :: Graphics :: Capture :: Screen Capture",
     "Typing :: Typed",
 ]
-dependencies = ["websockets>=12.0"]
+dependencies = ["websockets>=12.0", "click>=8.0"]
 requires-python = ">=3.10"
+
+[project.scripts]
+nokap = "nokap._cli:cli"
 
 [project.optional-dependencies]
 extra = ["Pillow>=10.2.0"]
