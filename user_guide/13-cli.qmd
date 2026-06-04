@@ -1,0 +1,143 @@
+---
+title: "The CLI"
+guide-section: "Core Concepts"
+tags: [CLI, Tutorial]
+---
+
+# The CLI
+
+nokap includes a command-line interface for capturing screenshots and PDFs without writing Python.
+
+## Overview
+
+nokap includes a command-line interface with two main commands:
+
+- `nokap webshot` — Capture a URL or local file as an image or PDF
+- `nokap from-html` — Render an HTML file to an image or PDF
+
+## Installation
+
+The CLI is installed automatically with the package:
+
+```bash
+pip install nokap
+nokap --version
+```
+
+## `nokap webshot`
+
+```bash
+nokap webshot [OPTIONS] URL [FILE]
+```
+
+### Arguments
+
+| Argument | Description | Default |
+|----------|-------------|---------|
+| `URL` | URL or local file path to capture | *(required)* |
+| `FILE` | Output file path | `webshot.png` |
+
+### Options
+
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| `--vwidth` | | Viewport width in pixels | `992` |
+| `--vheight` | | Viewport height in pixels | `744` |
+| `--selector` | `-s` | CSS selector to capture | *(full page)* |
+| `--expand` | `-e` | Pixels to expand around selector | `0` |
+| `--delay` | `-d` | Seconds to wait after page load | `0.2` |
+| `--zoom` | `-z` | Zoom/scale factor | `1.0` |
+| `--useragent` | | Custom User-Agent string | *(Chrome default)* |
+| `--page-size` | | Paper size for PDF output | `letter` |
+| `--landscape` | | Use landscape orientation (PDF) | *(flag)* |
+| `--print-background` | | Print CSS backgrounds (PDF) | *(flag)* |
+
+### Examples
+
+```bash
+# Basic screenshot
+nokap webshot https://example.com screenshot.png
+
+# Capture a specific element
+nokap webshot https://example.com header.png -s "h1"
+
+# Retina quality with padding
+nokap webshot page.html table.png -s "table" -z 2 -e 10
+
+# Mobile viewport
+nokap webshot https://example.com mobile.png --vwidth 375 --vheight 812
+
+# PDF with A4 page size
+nokap webshot https://example.com doc.pdf --page-size a4
+
+# Landscape PDF with backgrounds
+nokap webshot report.html report.pdf --landscape --print-background
+```
+
+## `nokap from-html`
+
+```bash
+nokap from-html [OPTIONS] HTML_FILE [FILE]
+```
+
+### Arguments
+
+| Argument | Description | Default |
+|----------|-------------|---------|
+| `HTML_FILE` | Path to an HTML file to render | *(required)* |
+| `FILE` | Output file path | `webshot.png` |
+
+### Options
+
+| Option | Short | Description | Default |
+|--------|-------|-------------|---------|
+| `--selector` | `-s` | CSS selector to capture | `html` |
+| `--vwidth` | | Viewport width in pixels | `992` |
+| `--vheight` | | Viewport height in pixels | `744` |
+| `--expand` | `-e` | Pixels to expand around selector | `0` |
+| `--delay` | `-d` | Seconds to wait after page load | `0.2` |
+| `--zoom` | `-z` | Zoom/scale factor | `1.0` |
+
+### Examples
+
+```bash
+# Render full HTML page
+nokap from-html report.html report.png
+
+# Capture just a table with 2× zoom
+nokap from-html data.html table.png -s "table" -z 2
+
+# Add padding around element
+nokap from-html chart.html chart.png -s "#chart" -e 20
+
+# Generate PDF from HTML
+nokap from-html invoice.html invoice.pdf
+```
+
+## Output
+
+On success, both commands print the absolute path to the output file:
+
+```bash
+$ nokap webshot https://example.com /tmp/shot.png
+/tmp/shot.png
+```
+
+On error, a message is printed to stderr and the exit code is `1`:
+
+```bash
+$ nokap webshot page.html out.png -s "#missing"
+Error: No element matches selector: '#missing'
+```
+
+## Global Options
+
+```bash
+nokap --version   # Show version
+nokap --help      # Show help
+```
+
+## Next Steps
+
+- [Integration with Great Tables](20-great-tables-integration.qmd) — Automate table screenshots
+- [Error Handling](21-error-handling.qmd) — Handle errors gracefully
