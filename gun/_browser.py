@@ -6,8 +6,8 @@ import re
 import shutil
 import subprocess
 import time
-from pathlib import Path
 
+from ._errors import ChromeNotFoundError, ChromeStartError
 from ._utils import current_platform, find_open_port
 
 
@@ -37,7 +37,8 @@ def find_chrome() -> str:
         candidates = [
             "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
             "/Applications/Chromium.app/Contents/MacOS/Chromium",
-            "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary",
+            "/Applications/Google Chrome Canary.app/Contents/MacOS/"
+            "Google Chrome Canary",
             "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
             "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
         ]
@@ -78,10 +79,7 @@ def find_chrome() -> str:
                 if os.path.isfile(full):
                     return full
 
-    raise RuntimeError(
-        "Chrome/Chromium not found. Install Chrome or set the CHROME_PATH "
-        "environment variable to the Chrome executable path."
-    )
+    raise ChromeNotFoundError()
 
 
 def _default_chrome_args(port: int, headless: bool = True) -> list[str]:
@@ -199,14 +197,15 @@ class Chrome:
             # Check if process has died
             if self._process.poll() is not None:
                 stderr_text = accumulated.decode("utf-8", errors="replace")
-                raise RuntimeError(
-                    f"Chrome process exited unexpectedly (code {self._process.returncode}).\n"
-                    f"stderr: {stderr_text[:500]}"
+                msg = (
+                    "Chrome process exited unexpectedly"
+                    f" (code {self._process.returncode})"
                 )
+                raise ChromeStartError(msg, stderr=stderr_text)
 
             time.sleep(0.05)
 
-        raise RuntimeError(
+        raise ChromeStartError(
             f"Timed out after {timeout}s waiting for Chrome DevTools WebSocket URL. "
             "Ensure Chrome is installed and working."
         )
