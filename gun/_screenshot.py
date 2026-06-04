@@ -90,7 +90,9 @@ def capture_screenshot(
             clip = _apply_expand(clip, exp)
 
     elif cliprect is not None:
-        clip = ClipRect(x=cliprect[0], y=cliprect[1], width=cliprect[2], height=cliprect[3])
+        clip = ClipRect(
+            x=cliprect[0], y=cliprect[1], width=cliprect[2], height=cliprect[3]
+        )
 
     # Build CDP params
     params: dict[str, Any] = {
