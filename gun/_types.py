@@ -128,3 +128,11 @@ class PDFOptions:
         }
 
 
+@dataclass
+class BrowserOptions:
+    """Options for Chrome browser launch."""
+
+    path: str | None = None
+    headless: bool = True
+    extra_args: list[str] = field(default_factory=list)
+    timeout: float = 10.0
