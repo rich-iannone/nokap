@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from ._session import Session
-from ._types import PDFOptions, PaperSize
+from ._types import PaperSize, PDFOptions
 
 
 def capture_pdf(
