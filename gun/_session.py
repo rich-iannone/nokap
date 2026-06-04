@@ -249,3 +249,30 @@ class Session:
         self._send("Network.enable")
         self._send("Network.setUserAgentOverride", {"userAgent": user_agent})
 
+    def close(self) -> None:
+        """Close this session (tab)."""
+        if self._closed:
+            return
+        self._closed = True
+        if self._target_id:
+            try:
+                self._cdp.send("Target.closeTarget", {"targetId": self._target_id})
+            except Exception:
+                pass
+
+    def __enter__(self) -> Session:
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        self.close()
+
+
+def _js_string(s: str) -> str:
+    """Escape a Python string for safe use in JavaScript."""
+    import json as json_mod
+
+    return json_mod.dumps(s)
+
+
+# We need the json import at module level for get_elements_union_bounds
+import json
