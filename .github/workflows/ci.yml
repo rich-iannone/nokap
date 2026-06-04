@@ -46,7 +46,7 @@ jobs:
           chrome-version: stable
 
       - name: Install dependencies
-        run: pip install -e ".[dev]" great_tables
+        run: pip install -e ".[dev]" great_tables pandas
 
       - name: Run unit tests
         run: pytest tests/ -v --ignore=tests/test_integration.py --ignore=tests/test_errors.py
