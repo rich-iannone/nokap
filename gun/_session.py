@@ -129,3 +129,28 @@ class Session:
             },
         )
 
+    def evaluate(self, expression: str) -> Any:
+        """
+        Evaluate a JavaScript expression and return the result.
+
+        Parameters
+        ----------
+        expression
+            JavaScript expression to evaluate.
+
+        Returns
+        -------
+        Any
+            The result value from the JavaScript evaluation.
+        """
+        result = self._send(
+            "Runtime.evaluate",
+            {"expression": expression, "returnByValue": True},
+        )
+        if "exceptionDetails" in result:
+            exc = result["exceptionDetails"]
+            text = exc.get("text", "JavaScript evaluation failed")
+            raise RuntimeError(f"JS error: {text}")
+        remote_obj = result.get("result", {})
+        return remote_obj.get("value")
+
