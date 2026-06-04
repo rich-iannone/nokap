@@ -91,3 +91,21 @@ class TestFromHtml:
         result = gun.from_html("<h1>PDF Test</h1>", out)
         assert result == out
         assert out.read_bytes()[:4] == b"%PDF"
+
+
+class TestGreatTables:
+    """Test integration with great_tables."""
+
+    gt = pytest.importorskip("great_tables")
+
+    def test_gt_table_snapshot(self, tmp_path):
+        """Capture a GT table as a PNG, matching the gun-test.qmd workflow."""
+        from great_tables import GT, exibble
+
+        html = GT(exibble).as_raw_html(make_page=True, all_important=True)
+        out = tmp_path / "gt_table.png"
+        result = gun.from_html(html, out, selector="table", zoom=2, expand=5)
+        assert result == out
+        assert out.exists()
+        # A rendered GT table should produce a substantial image
+        assert out.stat().st_size > 5000
