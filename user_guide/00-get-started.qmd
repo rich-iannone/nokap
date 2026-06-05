@@ -12,8 +12,6 @@ Learn what nokap is, why it exists, and how it works under the hood.
 
 **nokap** is a lightweight Python package that captures screenshots and PDFs from web pages using headless Chrome via the [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/) (CDP). It communicates directly with Chrome over WebSockets — no Selenium, no Playwright, no browser driver binaries.
 
-The name "nokap" comes from the idea of a clean, no-cap screenshot: what you see is what you get.
-
 ## Why Use nokap?
 
 If you need to:
