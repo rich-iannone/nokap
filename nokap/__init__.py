@@ -6,7 +6,6 @@ from ._errors import (
     CDPError,
     ChromeNotFoundError,
     ChromeStartError,
-    ConnectionError_,
     NavigationError,
     NokapError,
     PageLoadTimeout,
