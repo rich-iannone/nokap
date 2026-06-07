@@ -45,8 +45,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Install Chrome (Linux)
-        if: runner.os == 'Linux'
+      - name: Install Chrome
         uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: stable
