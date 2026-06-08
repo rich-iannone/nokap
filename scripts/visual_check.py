@@ -37,6 +37,29 @@ def _get_gt_html() -> str:
     return GT_HTML
 
 
+# A wide GT table (many columns) to test wide-table handling
+_WIDE_GT_HTML: str | None = None
+
+
+def _get_wide_gt_html() -> str:
+    global _WIDE_GT_HTML
+    if _WIDE_GT_HTML is not None:
+        return _WIDE_GT_HTML
+
+    import pandas as pd
+    from great_tables import GT
+
+    # Build a wide DataFrame with 20 columns of varied content
+    df = pd.DataFrame(
+        {
+            f"col_{i:02d}": [f"value_{i}_{r}" for r in range(8)]
+            for i in range(20)
+        }
+    )
+    _WIDE_GT_HTML = GT(df).as_raw_html(make_page=True, all_important=True)
+    return _WIDE_GT_HTML
+
+
 def main() -> None:
     OUTPUT_DIR.mkdir(exist_ok=True)
 
@@ -70,7 +93,7 @@ def main() -> None:
         generated.append(out)
 
     # --- PDF full-page captures (varying page sizes) ---
-    page_sizes = ["letter", "a4"]
+    page_sizes = ["letter", "legal", "tabloid", "ledger", "a0", "a1", "a2", "a3", "a4", "a5", "a6"]
     for page_size in page_sizes:
         name = f"pdf_fullpage_{page_size}.pdf"
         out = OUTPUT_DIR / name
@@ -84,6 +107,30 @@ def main() -> None:
         )
         print(f"{out.stat().st_size / 1024:.1f} KB")
         generated.append(out)
+
+    # --- Wide table: element-bounded PDF (tests natural-width measurement) ---
+    wide_html = _get_wide_gt_html()
+    for expand in EXPANDS:
+        name = f"pdf_element_wide_expand{expand}.pdf"
+        out = OUTPUT_DIR / name
+        print(f"  {name} ...", end=" ", flush=True)
+        nokap.from_html(
+            wide_html,
+            out,
+            selector="table",
+            expand=expand,
+            delay=0.3,
+        )
+        print(f"{out.stat().st_size / 1024:.1f} KB")
+        generated.append(out)
+
+    # Wide table as PNG for comparison
+    name = "png_wide_zoom2_expand5.png"
+    out = OUTPUT_DIR / name
+    print(f"  {name} ...", end=" ", flush=True)
+    nokap.from_html(wide_html, out, selector="table", zoom=2, expand=5, delay=0.3)
+    print(f"{out.stat().st_size / 1024:.1f} KB")
+    generated.append(out)
 
     nokap.close()
 
