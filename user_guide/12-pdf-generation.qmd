@@ -103,7 +103,7 @@ The `zoom` parameter is ignored for PDF output. PDFs are vector format and alway
 
 ## Element-Bounded PDF
 
-When you combine a `.pdf` output with a `selector`, nokap produces a tightly-bounded PDF sized to fit just that element — with selectable text preserved. This is ideal for exporting tables or charts into presentations where you need vector quality without an entire page of whitespace.
+When you combine a `.pdf` output with a `selector`, nokap produces a tightly-bounded PDF sized to fit just that element (with selectable text preserved). This is ideal for exporting tables or charts into presentations where you need vector quality without an entire page of whitespace.
 
 ```{python}
 #| eval: false
@@ -137,7 +137,7 @@ The `expand` parameter adds even whitespace around the element in the PDF:
 
 ```{python}
 #| eval: false
-# No padding — PDF edges touch the table
+# No padding: PDF edges touch the table
 nokap.from_html(html, "tight.pdf", selector="table")
 
 # 20px breathing room on all sides
@@ -153,7 +153,7 @@ Element-bounded PDFs include CSS backgrounds by default (since styled tables and
 
 ### Wide Tables
 
-nokap automatically detects when a table (or other element with intrinsic width) is being constrained by the viewport. It widens the viewport to let the element render at its natural size, then sizes the PDF to fit. No manual `vwidth` adjustment is needed — even very wide tables with many columns render completely.
+nokap automatically detects when a table (or other element with intrinsic width) is being constrained by the viewport. It widens the viewport to let the element render at its natural size, then sizes the PDF to fit. No manual `vwidth` adjustment is needed. So even very wide tables with many columns render completely.
 
 ```{python}
 #| eval: false
