@@ -12,8 +12,13 @@ name = "nokap"
 description = "Capture screenshots and PDFs from web pages using headless Chrome via CDP."
 readme = "README.md"
 keywords = ["screenshot", "chrome", "cdp", "pdf", "headless", "webshot"]
-license.file = "LICENSE"
-authors = [{ name = "Richard Iannone", email = "riannone@me.com" }]
+license = { file = "LICENSE" }
+authors = [
+    {name = "Rich Iannone", email = "riannone@me.com"}
+]
+maintainers = [
+    {name = "Rich Iannone", email = "riannone@me.com"}
+]
 dynamic = ["version"]
 classifiers = [
     "Development Status :: 3 - Alpha",
