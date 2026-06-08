@@ -2,6 +2,9 @@
 /*.md
 !README.md
 
+# Visual check outputs
+_visual_check/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
