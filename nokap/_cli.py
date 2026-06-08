@@ -58,8 +58,8 @@ def webshot(
     """Take a screenshot or PDF of a URL or local file.
 
     URL can be an http/https URL or a local file path.
-    FILE is the output path (default: webshot.png). Format is determined by
-    extension: .png, .jpg, .webp for images; .pdf for PDF.
+    `FILE` is the output path (default: `webshot.png`). Format is determined by
+    extension: `.png`, `.jpg`, `.webp` for images; `.pdf` for `PDF`.
     """
     try:
         result = nokap.webshot(
@@ -109,8 +109,8 @@ def from_html(
 ) -> None:
     """Render an HTML file to an image or PDF.
 
-    HTML_FILE is a path to an HTML file to render.
-    FILE is the output path (default: webshot.png).
+    `HTML_FILE` is a path to an HTML file to render.
+    `FILE` is the output path (default: `webshot.png`).
     """
     html_content = Path(html_file).read_text(encoding="utf-8")
     try:
