@@ -8,7 +8,7 @@ license: MIT
 compatibility: Requires Python >=3.10 and Chrome/Chromium installed on the system.
 ---
 
-# nokap — PDF Generation
+# nokap: PDF Generation
 
 Generate PDFs from web pages, local HTML files, or raw HTML strings. nokap
 supports two modes: full-page PDFs with standard paper dimensions, and
@@ -153,8 +153,8 @@ nokap from-html data.html table.pdf -s "table" -e 5
 4. Full-page PDF margins are in **inches**, while `expand` (for element-bounded PDFs) is in **CSS pixels**.
 5. For HTML with dark backgrounds or colored table cells, always set `print_background=True` or the colors won't appear in the PDF.
 6. The `margins` parameter only applies to full-page PDFs. For element-bounded PDFs, use `expand` to add spacing.
-7. Paper size names are lowercase strings: `"letter"`, `"a4"`, `"legal"` — not `"Letter"` or `"A4"`.
-8. Element-bounded PDFs have selectable text — they're true vector PDFs, not rasterized images wrapped in PDF.
+7. Paper size names are lowercase strings: `"letter"`, `"a4"`, `"legal"` (not `"Letter"` or `"A4"`).
+8. Element-bounded PDFs have selectable text so they're true vector PDFs, not rasterized images wrapped in PDF.
 
 ## Decision Table
 
@@ -172,4 +172,4 @@ nokap from-html data.html table.pdf -s "table" -e 5
 
 - [Full documentation](https://rich-iannone.github.io/nokap/)
 - [PDF generation guide](https://rich-iannone.github.io/nokap/user-guide/12-pdf-generation.html)
-- [llms-full.txt](https://rich-iannone.github.io/nokap/llms-full.txt) — Complete reference
+- [llms-full.txt](https://rich-iannone.github.io/nokap/llms-full.txt): complete reference

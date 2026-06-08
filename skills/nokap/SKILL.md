@@ -48,15 +48,15 @@ Main capture function. Output format determined by file extension (`.png`,
 
 Key parameters:
 
-- `url` — URL or local file path (auto-converted to `file://`)
-- `file` — Output path (default: `"webshot.png"`)
-- `selector` — CSS selector to crop to element's bounding box
-- `cliprect` — Explicit `(x, y, width, height)` clip rectangle
-- `expand` — Padding around selector (int for all sides, or 4-tuple)
-- `zoom` — Scale factor for raster images (>1 = higher resolution)
-- `delay` — Seconds to wait after page load (default: 0.2)
-- `vwidth` / `vheight` — Viewport dimensions (default: 992×744)
-- `useragent` — Custom User-Agent string
+- `url`: URL or local file path (auto-converted to `file://`)
+- `file`: Output path (default: `"webshot.png"`)
+- `selector`: CSS selector to crop to element's bounding box
+- `cliprect`: Explicit `(x, y, width, height)` clip rectangle
+- `expand`: Padding around selector (int for all sides, or 4-tuple)
+- `zoom`: Scale factor for raster images (>1 = higher resolution)
+- `delay`: Seconds to wait after page load (default: 0.2)
+- `vwidth` / `vheight`: Viewport dimensions (default: 992×744)
+- `useragent`: Custom User-Agent string
 
 ### `from_html(html, file, *, selector="html", encoding="utf-8", **kwargs)`
 
@@ -71,14 +71,14 @@ use this in long-running processes or after batch captures.
 ## Gotchas
 
 1. The module name is `nokap`, not `no-kap` or `no_kap`.
-2. `selector` and `cliprect` are mutually exclusive — never pass both.
+2. `selector` and `cliprect` are mutually exclusive: never pass both.
 3. `zoom` only affects raster images (PNG/JPEG/WebP), not PDF output. PDFs are vector and always sharp.
 4. `from_html()` defaults to `selector="html"` (full document), while `webshot()` defaults to `selector=None` (viewport only).
 5. The browser singleton auto-starts on first call. Call `nokap.close()` to free resources in long-running scripts.
-6. Local file paths are auto-converted to `file://` URLs — no manual conversion needed.
+6. Local file paths are auto-converted to `file://` URLs: no manual conversion needed.
 7. `expand` uses CSS pixel units and applies padding around the selector bounding box.
 8. For wide elements (tables), nokap auto-detects intrinsic width and widens the viewport to avoid clipping.
-9. Chrome must be installed separately — nokap does not bundle a browser.
+9. Chrome must be installed separately: nokap does not bundle a browser.
 10. Set `CHROME_PATH` environment variable if Chrome is not in a standard location.
 
 ## Error Handling
@@ -103,6 +103,6 @@ except nokap.NokapError as e:
 ## Resources
 
 - [Full documentation](https://rich-iannone.github.io/nokap/)
-- [llms.txt](https://rich-iannone.github.io/nokap/llms.txt) — API overview for LLMs
-- [llms-full.txt](https://rich-iannone.github.io/nokap/llms-full.txt) — Complete reference
+- [llms.txt](https://rich-iannone.github.io/nokap/llms.txt): API overview for LLMs
+- [llms-full.txt](https://rich-iannone.github.io/nokap/llms-full.txt): Complete reference
 - [Source code](https://github.com/rich-iannone/nokap)

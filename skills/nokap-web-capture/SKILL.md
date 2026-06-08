@@ -8,7 +8,7 @@ license: MIT
 compatibility: Requires Python >=3.10, Chrome/Chromium, and network access for remote URLs.
 ---
 
-# nokap — Web Page Capture
+# nokap: Web Page Capture
 
 Capture screenshots and PDFs from live web pages (HTTP/HTTPS URLs) or local
 HTML files served via `file://`.
@@ -153,7 +153,7 @@ nokap.close()
 
 ## Local File Capture
 
-Local HTML files work the same way — nokap auto-converts paths to `file://`:
+Local HTML files work the same way and nokap auto-converts paths to `file://`:
 
 ```python
 # Path string
@@ -184,7 +184,7 @@ nokap webshot https://example.com app.png -d 3.0
 
 1. The `delay` parameter counts from the page load event, not from navigation start. JavaScript that runs after `load` may need a longer delay.
 2. Selectors must match exactly one element. If the selector matches nothing, `SelectorError` is raised.
-3. `zoom` multiplies the pixel dimensions — a 992×744 viewport at zoom=2 produces a 1984×1488 image file.
+3. `zoom` multiplies the pixel dimensions so a 992×744 viewport at zoom=2 produces a 1984×1488 image file.
 4. Wide elements (e.g., tables) are auto-detected. nokap temporarily widens the viewport to capture the full natural width without horizontal clipping.
 5. For pages behind authentication, nokap cannot handle login flows. Pre-authenticate or use a session cookie via a custom user-agent workaround.
 

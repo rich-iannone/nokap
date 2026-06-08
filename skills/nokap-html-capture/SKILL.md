@@ -8,13 +8,13 @@ license: MIT
 compatibility: Requires Python >=3.10 and Chrome/Chromium installed on the system.
 ---
 
-# nokap — HTML Capture
+# nokap: HTML Capture
 
 Render raw HTML strings or local HTML files to images (PNG, JPEG, WebP) or PDFs.
 This is the primary integration point for packages that generate HTML and need
 to convert it to a visual format.
 
-## `from_html()` — Core Function
+## `from_html()`: Core Function
 
 ```python
 import nokap
@@ -197,7 +197,7 @@ nokap from-html invoice.html invoice.pdf -s "table"
 
 ## Gotchas
 
-1. `from_html()` defaults to `selector="html"` — it captures the full document, not just the viewport. This differs from `webshot()` which defaults to `selector=None` (viewport-only).
+1. `from_html()` defaults to `selector="html"`; it captures the full document, not just the viewport. This differs from `webshot()` which defaults to `selector=None` (viewport-only).
 2. The HTML is written to a temp file and loaded via `file://`. External resources using relative paths won't resolve unless you use absolute URLs or inline styles.
 3. For HTML with external CSS/JS (CDN links), add `delay=1.0` or more to allow resources to load.
 4. nokap auto-detects wide elements (tables wider than viewport) and expands the viewport. You generally don't need to set `vwidth` manually for tables.
