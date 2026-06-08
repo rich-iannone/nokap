@@ -9,7 +9,7 @@ from typing import Any
 from ._browser import Chrome
 from ._cdp import SyncCDP
 from ._errors import ChromeStartError, ConnectionError_
-from ._pdf import capture_pdf
+from ._pdf import capture_element_pdf, capture_pdf
 from ._screenshot import capture_screenshot
 from ._session import Session
 from ._types import PaperSize
@@ -189,15 +189,28 @@ def webshot(
 
         # Capture
         if is_pdf:
-            return capture_pdf(
-                session,
-                out_file,
-                page_size=page_size,
-                margins=margins,
-                landscape=landscape,
-                scale=zoom,
-                print_background=print_background,
-            )
+            if selector is not None or cliprect is not None:
+                # Element-bounded PDF: tight fit around selector/cliprect
+                return capture_element_pdf(
+                    session,
+                    out_file,
+                    selector=selector,
+                    cliprect=cliprect,
+                    expand=expand,
+                    scale=zoom,
+                    print_background=print_background,
+                )
+            else:
+                # Full-page PDF with standard paper dimensions
+                return capture_pdf(
+                    session,
+                    out_file,
+                    page_size=page_size,
+                    margins=margins,
+                    landscape=landscape,
+                    scale=zoom,
+                    print_background=print_background,
+                )
         else:
             return capture_screenshot(
                 session,
