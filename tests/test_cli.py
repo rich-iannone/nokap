@@ -134,7 +134,7 @@ class TestFromHtmlHelp:
 class TestWebshotIntegration:
     def test_screenshot_url(self, runner, tmp_path):
         out = str(tmp_path / "out.png")
-        result = runner.invoke(cli, ["webshot", "https://example.com", out])
+        result = runner.invoke(cli, ["webshot", "https://www.google.com", out])
         assert result.exit_code == 0
         assert out in result.output
         assert (tmp_path / "out.png").exists()

@@ -22,7 +22,7 @@ def cleanup():
 class TestWebshot:
     def test_screenshot_url(self, tmp_path):
         out = tmp_path / "example.png"
-        result = nokap.webshot("https://example.com", out)
+        result = nokap.webshot("https://www.google.com", out)
         assert result == out
         assert out.exists()
         assert out.stat().st_size > 0
@@ -48,13 +48,13 @@ class TestWebshot:
 
     def test_screenshot_jpeg(self, tmp_path):
         out = tmp_path / "example.jpg"
-        result = nokap.webshot("https://example.com", out)
+        result = nokap.webshot("https://www.google.com", out)
         assert result == out
         assert out.exists()
 
     def test_pdf(self, tmp_path):
         out = tmp_path / "example.pdf"
-        result = nokap.webshot("https://example.com", out)
+        result = nokap.webshot("https://www.google.com", out)
         assert result == out
         assert out.exists()
         # PDF files start with %PDF
