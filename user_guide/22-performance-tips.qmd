@@ -98,3 +98,9 @@ Each `webshot()` or `from_html()` call creates and closes a browser tab. This pr
 | Tab cleanup | ~10ms |
 
 For local HTML content with `delay=0`, expect ~100ms per capture after the initial Chrome launch.
+
+## Next Steps
+
+With browser reuse, minimal delay, and the right format choices, nokap can process hundreds of captures efficiently. The key insight is that Chrome stays warm between calls (you only pay the startup cost once, and each subsequent capture is just a tab open, navigate, capture, and close cycle).
+
+You now have all the tools to build high-throughput capture pipelines. Combine what you've learned here with the error handling patterns from the previous page to build robust batch workflows that recover from transient failures without losing progress.

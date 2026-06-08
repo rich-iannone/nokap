@@ -139,5 +139,9 @@ nokap --help      # Show help
 
 ## Next Steps
 
+The CLI gives you access to all of nokap's capture capabilities without writing Python (useful for shell scripts, CI pipelines, Makefiles, and quick one-off captures from the terminal). Every option available in the Python API has a corresponding command-line flag.
+
 - [Integration with Great Tables](20-great-tables-integration.qmd): Automate table screenshots
 - [Error Handling](21-error-handling.qmd): Handle errors gracefully
+
+If you're building automation around nokap, the error handling guide will help you write robust scripts that recover gracefully from common failure modes like missing selectors or Chrome startup issues.

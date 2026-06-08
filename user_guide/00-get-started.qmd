@@ -53,5 +53,9 @@ The entire package has a single runtime dependency: [`websockets`](https://pypi.
 
 ## Next Steps
 
+You now have a clear picture of what nokap is, how it communicates with Chrome, and what it can do. The architecture is intentionally minimal (a direct WebSocket connection to Chrome's DevTools Protocol) which keeps things fast, predictable, and free of heavyweight dependencies.
+
 - [Installation](01-installation.qmd): Get nokap set up on your system
 - [Quick Start](02-quick-start.qmd): Your first screenshot in 30 seconds
+
+Once nokap is installed and Chrome is discoverable on your system, you'll be ready to capture your first screenshot in just a few lines of code.

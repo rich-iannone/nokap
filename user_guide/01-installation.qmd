@@ -105,4 +105,8 @@ print(f"Chrome found at: {path}")
 
 ## Next Steps
 
+nokap is now installed and Chrome is discoverable on your system. The setup is intentionally lightweight: just one runtime dependency and a system Chrome installation. Everything else (browser launch, WebSocket connection, tab management) is handled internally.
+
 - [Quick Start](02-quick-start.qmd): Take your first screenshot
+
+With installation complete, you're ready to capture your first screenshot. The Quick Start guide walks you through the three main input modes in under a minute.

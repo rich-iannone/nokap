@@ -237,5 +237,9 @@ nokap.from_html(html, "table_for_slides.pdf", selector="table", expand=10)
 
 ## Next Steps
 
+This page covered both full-page and element-bounded PDF generation from standard paper sizes and margins to the tightly-fitted, selector-driven PDFs that are ideal for embedding in presentations. Because PDFs are vector format, you get crisp text at any zoom level without worrying about pixel density.
+
 - [The CLI](13-cli.qmd): Generate PDFs from the command line
 - [Integration with Great Tables](20-great-tables-integration.qmd): Export tables as images or PDFs
+
+All of the PDF options covered here are also available via the command-line interface, making it easy to integrate nokap into scripts and automation pipelines.

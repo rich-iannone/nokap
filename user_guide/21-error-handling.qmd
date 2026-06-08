@@ -150,4 +150,8 @@ nokap.webshot("https://example.com", "second.png")  # Works fine
 
 ## Next Steps
 
+With a clear understanding of nokap's exception hierarchy, you can write capture code that fails gracefully (whether that means retrying on a timeout, logging a missing selector, or alerting when Chrome can't be found). The automatic recovery behavior means most transient failures resolve themselves without intervention.
+
 - [Performance Tips](22-performance-tips.qmd): Optimize for high-throughput capture
+
+Now that you know how to handle errors, the performance guide will help you maximize throughput when processing many pages or running in batch pipelines.

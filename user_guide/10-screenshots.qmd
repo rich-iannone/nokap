@@ -119,5 +119,9 @@ nokap.from_html(
 
 ## Next Steps
 
+You now have a solid foundation for capturing raster screenshots with nokap, from choosing formats and viewport sizes to controlling resolution with zoom and timing with delay. These options cover the majority of screenshot workflows, but nokap offers much more.
+
 - [Selectors and Clipping](11-selectors-and-clipping.qmd): Capture specific page elements
 - [PDF Generation](12-pdf-generation.qmd): Generate PDFs with full layout control
+
+With formats, dimensions, and timing under your belt, the next step is learning to target specific elements on a page rather than capturing the entire viewport.

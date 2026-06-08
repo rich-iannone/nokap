@@ -123,6 +123,10 @@ This is called automatically at process exit, but explicit cleanup is good pract
 
 ## Next Steps
 
+You've seen the essentials: capturing URLs, local files, and HTML strings as images or PDFs, targeting specific elements with selectors, and using the CLI for shell-based workflows. These building blocks cover the majority of day-to-day use cases.
+
 - [Screenshots](10-screenshots.qmd): Deep dive into image capture options
 - [PDF Generation](12-pdf-generation.qmd): Full PDF configuration
 - [The CLI](13-cli.qmd): Command-line usage reference
+
+Each of the guides above expands on what you've learned here, covering every parameter in detail. Start with whichever matches your immediate need. (You don't need to read them in order.)

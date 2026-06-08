@@ -134,5 +134,9 @@ except SelectorError as e:
 
 ## Next Steps
 
+With selectors, expand, clip rectangles, and automatic width detection, you can precisely control what gets captured, from a single heading to a wide data table with dozens of columns. These tools eliminate the need for post-processing crops and ensure your output matches exactly what you see in the browser.
+
 - [PDF Generation](12-pdf-generation.qmd): Generate PDFs with page layout options
 - [Integration with Great Tables](20-great-tables-integration.qmd): Use nokap with GT
+
+Selectors become especially powerful when combined with PDF output, where a targeted selector produces a compact, element-sized PDF rather than a full page. Head to the PDF guide to see how these concepts come together.
