@@ -196,13 +196,14 @@ def webshot(
             )
             if use_element_pdf:
                 # Element-bounded PDF: tight fit around selector/cliprect
+                # Note: zoom/scale is ignored for PDF — vector output is
+                # resolution-independent and always sharp.
                 return capture_element_pdf(
                     session,
                     out_file,
                     selector=selector,
                     cliprect=cliprect,
                     expand=expand,
-                    scale=zoom,
                     print_background=print_background,
                 )
             else:
@@ -213,7 +214,6 @@ def webshot(
                     page_size=page_size,
                     margins=margins,
                     landscape=landscape,
-                    scale=zoom,
                     print_background=print_background,
                 )
         else:
