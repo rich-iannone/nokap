@@ -207,5 +207,5 @@ nokap from-html invoice.html invoice.pdf -s "table"
 ## Resources
 
 - [Full documentation](https://posit-dev.github.io/nokap/)
-- [Screenshots guide](https://posit-dev.github.io/nokap/user-guide/10-screenshots.html)
-- [Quick start](https://posit-dev.github.io/nokap/user-guide/02-quick-start.html)
+- [Screenshots guide](https://posit-dev.github.io/nokap/user-guide/screenshots.html)
+- [Quick start](https://posit-dev.github.io/nokap/user-guide/quick-start.html)
