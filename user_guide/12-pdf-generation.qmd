@@ -127,7 +127,7 @@ from great_tables import GT, exibble
 
 html = GT(exibble).as_raw_html(make_page=True, all_important=True)
 
-# Tight PDF of just the table — perfect for slides
+# Tight PDF of just the table (useful for slides)
 nokap.from_html(html, "table.pdf", selector="table", expand=5)
 ```
 
