@@ -271,12 +271,12 @@ def doctor() -> None:
     click.echo("2. Launching headless Chrome...", nl=False)
     t0 = time.perf_counter()
     try:
-        nokap.webshot.__module__  # Force module load
+        _ = nokap.webshot.__module__  # Force module load
         from nokap._api import _get_browser
 
         browser = _get_browser()
     except Exception as e:
-        click.echo(f" FAIL")
+        click.echo(" FAIL")
         click.echo(f"   {e}")
         sys.exit(1)
     elapsed = (time.perf_counter() - t0) * 1000
@@ -299,7 +299,7 @@ def doctor() -> None:
         size = out_path.stat().st_size
         out_path.unlink()
     except Exception as e:
-        click.echo(f" FAIL")
+        click.echo(" FAIL")
         click.echo(f"   {e}")
         sys.exit(1)
     finally:
@@ -322,7 +322,7 @@ def doctor() -> None:
         size = out_path.stat().st_size
         out_path.unlink()
     except Exception as e:
-        click.echo(f" FAIL")
+        click.echo(" FAIL")
         click.echo(f"   {e}")
         sys.exit(1)
     finally:
@@ -461,7 +461,7 @@ def batch(
                 nokap.webshot(str(url), str(out_file), **kwargs)  # type: ignore[arg-type]
             click.echo(" OK")
         except Exception as e:
-            click.echo(f" FAIL")
+            click.echo(" FAIL")
             click.echo(f"       {e}", err=True)
             failed += 1
 
