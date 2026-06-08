@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: 'If you wish to cite the "nokap" package use:'
+type: software
+license: MIT
+title: "nokap: A Python package for capturing screenshots and PDFs of web content using Chrome DevTools Protocol"
+version: "0.1.0"
+abstract:
+  nokap helps you capture screenshots and PDFs of web content using the Chrome DevTools Protocol. It provides a
+  simple API for capturing web pages, specific elements, and custom regions, with support for delays, zoom, and
+  custom user agents.
+authors:
+  - family-names: Iannone
+    given-names: Rich
+    email: riannone@me.com
+    orcid: https://orcid.org/0000-0003-3925-190X
+repository-code: https://github.com/posit-dev/nokap
+url: https://posit-dev.github.io/nokap
+contact:
+  - family-names: Iannone
+    given-names: Rich
+    email: riannone@me.com
+    orcid: https://orcid.org/0000-0003-3925-190X
