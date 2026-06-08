@@ -528,7 +528,8 @@ def _handle_doctor(arguments: dict) -> list[TextContent]:
     else:
         results["test_capture"] = "skipped (no Chrome)"
 
-    results["status"] = "ready" if results.get("test_capture") == "success" else "not ready"
+    is_ready = results.get("test_capture") == "success"
+    results["status"] = "ready" if is_ready else "not ready"
 
     return [TextContent(type="text", text=json.dumps(results, indent=2))]
 
@@ -691,13 +692,13 @@ Consider these factors and provide specific recommendations:
    - PDF: Vector output for print, presentations, or selectable text
 
 2. **Function choice:**
-   - `nokap.webshot(url, file)`: For live URLs or local HTML files on disk
-   - `nokap.from_html(html_str, file)`: For HTML strings (from Great Tables, Plotly, templates)
+   - `nokap.webshot(url, file)`: For live URLs or local files
+   - `nokap.from_html(html_str, file)`: For HTML strings (Great Tables, Plotly)
 
 3. **Selector strategy:**
    - No selector: Captures the viewport only
    - `selector="html"`: Captures the full document (handles scroll)
-   - `selector="table"` / `selector=".class"` / `selector="#id"`: Element-bounded capture
+   - `selector="table"` / `selector=".class"` / `selector="#id"`: Element-bounded
 
 4. **Quality settings:**
    - `zoom=2`: Retina/HiDPI quality (2x pixel density) (recommended for presentations)
@@ -710,7 +711,7 @@ Consider these factors and provide specific recommendations:
    - `delay=3.0+`: Heavy dashboards with lazy-loaded content
 
 6. **PDF-specific:**
-   - Element-bounded PDF (`selector="table"`): Sized exactly to content, vector, selectable text
+   - Element-bounded PDF (`selector="table"`): Exact size, vector, selectable
    - Full-page PDF (no selector or `selector="html"`): Standard paper with margins
    - `print_background=True`: Required for colored/styled tables
 
@@ -737,7 +738,7 @@ Requirements for the script:
 - Use appropriate error handling (try/except for NokapError)
 - Print progress as each capture completes
 - Use `zoom=2` for high-quality output unless the format is PDF
-- For HTML strings, use `nokap.from_html()` with `selector="html"` or a specific selector
+- For HTML strings, use `nokap.from_html()` with `selector="html"` or specific
 - For URLs/files, use `nokap.webshot()`
 - The browser stays alive between captures (no need to restart per item)
 - For PDF output, consider using `print_background=True` for styled content
@@ -834,7 +835,10 @@ async def handle_completion(
         matches = [v for v in all_values if v.lower().startswith(prefix)]
         # Also include partial matches (contains) if few startswith matches
         if len(matches) < 3:
-            contains = [v for v in all_values if prefix in v.lower() and v not in matches]
+            contains = [
+                v for v in all_values
+                if prefix in v.lower() and v not in matches
+            ]
             matches.extend(contains)
     else:
         matches = all_values
