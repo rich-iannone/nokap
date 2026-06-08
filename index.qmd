@@ -18,7 +18,7 @@ import nokap
 # Screenshot a URL
 nokap.webshot("https://example.com", "example.png")
 
-# From HTML string (perfect for table libraries)
+# From HTML string (useful for table libraries)
 html = "<h1>Hello, world!</h1>"
 nokap.from_html(html, "hello.png")
 ```
