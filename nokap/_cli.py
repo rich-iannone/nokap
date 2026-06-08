@@ -271,3 +271,129 @@ def doctor() -> None:
     click.echo("All checks passed.")
 
 
+@cli.command()
+@click.argument("manifest", type=click.Path(exists=True))
+@click.option(
+    "--output-dir",
+    "-o",
+    default=".",
+    type=click.Path(),
+    help="Directory to write output files.",
+)
+@click.option("--delay", "-d", default=0.2, type=float, help="Default delay (seconds).")
+@click.option("--zoom", "-z", default=1.0, type=float, help="Default zoom factor.")
+@click.option(
+    "--selector", "-s", default=None, help="Default CSS selector for all entries."
+)
+@click.option(
+    "--expand", "-e", default=0, type=int, help="Default expand (pixels)."
+)
+def batch(
+    manifest: str,
+    output_dir: str,
+    delay: float,
+    zoom: float,
+    selector: str | None,
+    expand: int,
+) -> None:
+    """Capture multiple URLs/files from a JSON manifest.
+
+    MANIFEST is a path to a JSON file containing an array of capture jobs.
+    Each job is an object with at least a "url" (or "html") and "file" key.
+    All other keys correspond to webshot() parameters and override the
+    command-line defaults.
+
+    \b
+    Example manifest (captures.json):
+    [
+      {"url": "https://example.com", "file": "example.png"},
+      {"url": "report.html", "file": "report.pdf", "selector": "table"},
+      {"html": "<h1>Hello</h1>", "file": "hello.png", "zoom": 2}
+    ]
+
+    Run with: nokap batch captures.json -o output/
+    """
+    import json
+
+    manifest_path = Path(manifest)
+    out_dir = Path(output_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    try:
+        raw = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as e:
+        click.echo(f"Error reading manifest: {e}", err=True)
+        sys.exit(1)
+
+    if not isinstance(raw, list):
+        click.echo("Error: Manifest must be a JSON array of objects.", err=True)
+        sys.exit(1)
+
+    jobs = cast(list[dict[str, object]], raw)
+    total = len(jobs)
+    failed = 0
+
+    for i, job in enumerate(jobs, 1):
+        # Determine output file
+        file_name = job.get("file")
+        if not file_name or not isinstance(file_name, str):
+            click.echo(f"  [{i}/{total}] Skipping entry without 'file' key", err=True)
+            failed += 1
+            continue
+
+        out_file = out_dir / file_name
+
+        # Determine source
+        url = job.get("url")
+        html = job.get("html")
+
+        if not url and not html:
+            click.echo(
+                f"  [{i}/{total}] Skipping entry without 'url' or 'html' key",
+                err=True,
+            )
+            failed += 1
+            continue
+
+        # Build kwargs from job + command-line defaults
+        kwargs: dict[str, object] = {
+            "delay": job.get("delay", delay),
+            "zoom": job.get("zoom", zoom),
+            "expand": job.get("expand", expand),
+        }
+        job_selector = job.get("selector", selector)
+        if job_selector is not None:
+            kwargs["selector"] = job_selector
+        if "vwidth" in job:
+            kwargs["vwidth"] = job["vwidth"]
+        if "vheight" in job:
+            kwargs["vheight"] = job["vheight"]
+        if "page_size" in job:
+            kwargs["page_size"] = job["page_size"]
+        if "landscape" in job:
+            kwargs["landscape"] = job["landscape"]
+        if "print_background" in job:
+            kwargs["print_background"] = job["print_background"]
+
+        label = url or "(html string)"
+        click.echo(f"  [{i}/{total}] {label} → {out_file} ...", nl=False)
+
+        try:
+            if html:
+                nokap.from_html(str(html), str(out_file), **kwargs)  # type: ignore[arg-type]
+            else:
+                nokap.webshot(str(url), str(out_file), **kwargs)  # type: ignore[arg-type]
+            click.echo(" OK")
+        except Exception as e:
+            click.echo(f" FAIL")
+            click.echo(f"       {e}", err=True)
+            failed += 1
+
+    nokap.close()
+
+    click.echo("")
+    if failed:
+        click.echo(f"Done: {total - failed}/{total} succeeded, {failed} failed.")
+        sys.exit(1)
+    else:
+        click.echo(f"Done: {total}/{total} succeeded.")
