@@ -93,6 +93,19 @@ nav_icons:
     Error Handling: alert-triangle
     Performance Tips: zap
 
+# Skills (Multi-Skill Mode)
+# -------------------------
+skill:
+  skills:
+    - name: nokap
+      file: skills/nokap/SKILL.md
+    - name: nokap-web-capture
+      file: skills/nokap-web-capture/SKILL.md
+    - name: nokap-html-capture
+      file: skills/nokap-html-capture/SKILL.md
+    - name: nokap-pdf
+      file: skills/nokap-pdf/SKILL.md
+
 # Tags
 # ----
 tags:
