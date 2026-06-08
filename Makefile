@@ -41,6 +41,10 @@ type-check: ## Run type checking with pyright
 .PHONY: check
 check: lint type-check test ## Run all checks (lint, type-check, test)
 
+.PHONY: visual-check
+visual-check: ## Generate visual check images (PNG + PDF matrix)
+	@$(PYTHON) scripts/visual_check.py
+
 .PHONY: docs
 docs: ## Build documentation site
 	@.venv/bin/great-docs build
