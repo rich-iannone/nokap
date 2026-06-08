@@ -467,3 +467,126 @@ class TestCLIOptionValidation:
         html_file.write_text("<html><body><p>x</p></body></html>")
         result = runner.invoke(cli, ["from-html", str(html_file), "o.png", "-z", "abc"])
         assert result.exit_code != 0
+
+
+# ---------------------------------------------------------------------------
+# doctor command
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.skipif(not HAS_CHROME, reason="Chrome not installed")
+class TestDoctor:
+    def test_doctor_passes(self, runner):
+        result = runner.invoke(cli, ["doctor"])
+        assert result.exit_code == 0
+        assert "All checks passed" in result.output
+
+    def test_doctor_reports_chrome_path(self, runner):
+        result = runner.invoke(cli, ["doctor"])
+        assert "Path:" in result.output
+
+    def test_doctor_reports_timing(self, runner):
+        result = runner.invoke(cli, ["doctor"])
+        assert "ms" in result.output
+
+
+# ---------------------------------------------------------------------------
+# batch command
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.skipif(not HAS_CHROME, reason="Chrome not installed")
+class TestBatch:
+    def test_batch_html_jobs(self, runner, tmp_path):
+        import json
+
+        manifest = tmp_path / "jobs.json"
+        manifest.write_text(
+            json.dumps(
+                [
+                    {"html": "<h1>One</h1>", "file": "one.png"},
+                    {"html": "<h1>Two</h1>", "file": "two.png", "zoom": 2},
+                ]
+            )
+        )
+        out_dir = tmp_path / "output"
+        result = runner.invoke(
+            cli, ["batch", str(manifest), "-o", str(out_dir)]
+        )
+        assert result.exit_code == 0
+        assert (out_dir / "one.png").exists()
+        assert (out_dir / "two.png").exists()
+        assert "2/2 succeeded" in result.output
+
+    def test_batch_with_selector(self, runner, tmp_path):
+        import json
+
+        manifest = tmp_path / "jobs.json"
+        manifest.write_text(
+            json.dumps(
+                [
+                    {
+                        "html": "<div><table><tr><td>X</td></tr></table></div>",
+                        "file": "table.pdf",
+                        "selector": "table",
+                        "expand": 5,
+                    }
+                ]
+            )
+        )
+        out_dir = tmp_path / "output"
+        result = runner.invoke(
+            cli, ["batch", str(manifest), "-o", str(out_dir)]
+        )
+        assert result.exit_code == 0
+        pdf_file = out_dir / "table.pdf"
+        assert pdf_file.exists()
+        assert pdf_file.read_bytes()[:4] == b"%PDF"
+
+    def test_batch_missing_file_key(self, runner, tmp_path):
+        import json
+
+        manifest = tmp_path / "jobs.json"
+        manifest.write_text(json.dumps([{"html": "<h1>No file</h1>"}]))
+        out_dir = tmp_path / "output"
+        result = runner.invoke(
+            cli, ["batch", str(manifest), "-o", str(out_dir)]
+        )
+        assert result.exit_code == 1
+        assert "0/1 succeeded" in result.output
+
+    def test_batch_invalid_json(self, runner, tmp_path):
+        manifest = tmp_path / "jobs.json"
+        manifest.write_text("not json")
+        result = runner.invoke(cli, ["batch", str(manifest)])
+        assert result.exit_code == 1
+        assert "Error reading manifest" in result.output
+
+    def test_batch_not_array(self, runner, tmp_path):
+        manifest = tmp_path / "jobs.json"
+        manifest.write_text('{"not": "array"}')
+        result = runner.invoke(cli, ["batch", str(manifest)])
+        assert result.exit_code == 1
+        assert "JSON array" in result.output
+
+    def test_batch_default_selector(self, runner, tmp_path):
+        """Command-line --selector applies to all jobs as default."""
+        import json
+
+        manifest = tmp_path / "jobs.json"
+        manifest.write_text(
+            json.dumps(
+                [
+                    {
+                        "html": "<div><p id='x'>Hi</p></div>",
+                        "file": "p.png",
+                    }
+                ]
+            )
+        )
+        out_dir = tmp_path / "output"
+        result = runner.invoke(
+            cli, ["batch", str(manifest), "-o", str(out_dir), "-s", "p"]
+        )
+        assert result.exit_code == 0
+        assert (out_dir / "p.png").exists()
