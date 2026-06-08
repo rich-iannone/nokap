@@ -75,7 +75,10 @@ def capture_screenshot(
     # width that's being constrained by the viewport (e.g., wide tables). We use
     # a two-pass approach: widen the viewport, re-measure, and check if the
     # element shrank (has intrinsic width) or stayed wide (fluid layout).
-    if selector is not None:
+    # Skip this for "html" and "body" selectors which are always fluid.
+    _FLUID_SELECTORS = {"html", "body"}
+    _skip_width_detect = isinstance(selector, str) and selector in _FLUID_SELECTORS
+    if selector is not None and not _skip_width_detect:
         # Apply zoom first so measurements account for scale
         if zoom != 1:
             session.set_viewport(
@@ -108,7 +111,11 @@ def capture_screenshot(
                 )
                 session.evaluate("document.body.offsetHeight")
     elif zoom != 1:
-        # Apply zoom via device scale factor
+        # Apply zoom via device scale factor (no selector, or skipped width detection)
+        session.set_viewport(session._width, session._height, device_scale_factor=zoom)
+
+    # If width detection was skipped but zoom is needed, apply it
+    if selector is not None and _skip_width_detect and zoom != 1:
         session.set_viewport(session._width, session._height, device_scale_factor=zoom)
 
     # Determine clip region
